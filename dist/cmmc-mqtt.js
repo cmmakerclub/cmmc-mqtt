@@ -21,10 +21,15 @@ exports.default = {
     var subTopics = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
     var autoconnect = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
+    var _opts = _underscore2.default.clone(mqttOpts);
+    var _connectString = void 0;
+    if (_opts.username && _opts.password) {
+      _connectString = _opts.host + ':' + _opts.password + '@' + _opts.host;
+    } else {
+      _connectString = _opts.host + ':' + _opts.port;
+    }
     var _forwardClient = void 0,
         _forwardPrefix = void 0;
-    var _opts = _underscore2.default.clone(mqttOpts);
-    var _connectString = _opts.host + ':' + _opts.port;
     var _mqtt = _mqtt3.default.connect(_connectString);
     var _callbacks = {
       on_connected: function on_connected() {},
