@@ -7,6 +7,7 @@ var moment = require('moment-timezone');
 var winston = require('winston');
 var chalk = require('chalk');
 
+console.log('LOG_LEVEL = ' + process.env.LOG_LEVEL);
 var logger = exports.logger = new winston.Logger({
   level: process.env.LOG_LEVEL || 'info',
   transports: [new winston.transports.Console({
