@@ -22,12 +22,13 @@ export default {
     }
     const ret = {
       connect: () => {
-        logger.debug(`connecting to mqtt broker with ${connectString}`)
+        logger.info(`connecting to mqtt broker with ${connectString}`)
         _callbacks.on_connecting.call(this)
         // register callbacks
         _mqtt.on('packetsend', _callbacks.on_packetsend)
         _mqtt.on('message', (topic, payload) => {
           _callbacks.on_message(topic, payload)
+          logger.info(`message arrived topic =  ${topic}`)
           if (_forwardClient) {
             logger.verbose(`publish: ${_forwardPrefix}${topic}`)
             logger.debug(payload.toString('hex'))
@@ -37,10 +38,10 @@ export default {
         _mqtt.on('close', _callbacks.on_close)
         _mqtt.on('error', _callbacks.on_error)
         _mqtt.on('connect', () => {
-          logger.verbose(`mqtt connected`)
+          logger.info(`${connectString} connected.`)
           _callbacks.on_connected.call(this)
           subTopics.forEach((topic, idx) => {
-            logger.verbose(`subscribe topic: ${topic}`)
+            logger.info(`subscribing to topic: ${topic}`)
             _mqtt.subscribe(topic)
           })
         })
