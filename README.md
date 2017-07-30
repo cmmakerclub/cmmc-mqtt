@@ -1,6 +1,6 @@
-# CMMC NodeJS template 
+# CMMC MQTT
 
-don't forget to change your project name in `package.json`
+an easy-way to deal with mqtt
 
 ## Development 
     $ git clone https://github.com/cmmakerclub/gulp-es6-nodejs-template.git your-project
@@ -9,6 +9,3 @@ don't forget to change your project name in `package.json`
     $ npm run tdd
 
 ##  Production
-
-```
-```

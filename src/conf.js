@@ -1,5 +1,3 @@
-import { logger } from './utils'
-
 /**
  * Created by nat on 7/6/2017 AD.
  */
@@ -18,7 +16,8 @@ if (ENV.NODE_ENV === 'production') {
     },
     TCP_SERVER: {
       PORT: 10778
-    }
+    },
+    LOG_LEVEL: 'info'
   }
 } else {
   DEFAULT_CONFIG = {
@@ -30,7 +29,8 @@ if (ENV.NODE_ENV === 'production') {
     },
     TCP_SERVER: {
       PORT: 10778
-    }
+    },
+    LOG_LEVEL: 'debug'
   }
 }
 
@@ -44,10 +44,10 @@ const SETTINGS = {
   SERVER: {
     PORT: ENV.TCP_SERVER_PORT || DEFAULT_CONFIG.TCP_SERVER.PORT
   },
-  DEBUG: ENV.DEBUG || true
+  DEBUG: ENV.DEBUG || true,
+  LOG_LEVEL: ENV.LOG_LEVEL || DEFAULT_CONFIG.LOG_LEVEL || 'debug'
 }
 
-logger.info('settings')
 console.log(SETTINGS)
 
 export default SETTINGS

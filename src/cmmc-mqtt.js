@@ -16,9 +16,9 @@ export default {
       on_error: () => { },
       on_packetsend: (packet) => {
         if (packet.cmd === 'subscribe') {
-          logger.debug(`subscribing to topic = ${JSON.stringify(packet.subscriptions)}`)
+          logger.verbose(`subscribing to topic = ${JSON.stringify(packet.subscriptions)}`)
         } else {
-          logger.debug(`cmd = ${packet.cmd}`)
+          logger.verbose(`cmd = ${packet.cmd}, password = ${JSON.stringify(packet)}`)
         }
       }
     }
