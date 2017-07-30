@@ -1,7 +1,7 @@
 {
-  "name": "cmmc-node-es6-gulp",
+  "name": "cmmc-mqtt",
   "version": "0.0.1",
-  "description": "cmmc-node-es6-gulp-template",
+  "description": "an easy mqtt wrapper",
   "engineStrict": true,
   "engines": {
     "node": ">=6.9"
