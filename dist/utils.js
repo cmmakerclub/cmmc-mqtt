@@ -3,20 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logger = undefined;
-
-var _conf = require('./conf');
-
-var _conf2 = _interopRequireDefault(_conf);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 var moment = require('moment-timezone');
 var winston = require('winston');
 var chalk = require('chalk');
 
+console.log('process.env', process.env);
 var logger = exports.logger = new winston.Logger({
-  level: _conf2.default.LOG_LEVEL,
+  level: process.env.LOG_LEVEL || 'info',
   transports: [new winston.transports.Console({
     timestamp: function timestamp() {
       return moment().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss');
