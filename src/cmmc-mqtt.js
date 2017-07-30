@@ -16,7 +16,7 @@ export default {
           logger.verbose(`subscribing to topic = ${JSON.stringify(packet.subscriptions)}`)
         } else {
           logger.verbose(`cmd = ${packet.cmd}`)
-          logger.debug(`packet = ${JSON.stringify(packet)}`)
+          logger.debug(`cmd = ${packet.cmd} packet = ${JSON.stringify(packet)}`)
         }
       }
     }
