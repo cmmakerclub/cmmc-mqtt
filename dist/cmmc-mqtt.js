@@ -28,9 +28,10 @@ exports.default = {
       on_error: function on_error() {},
       on_packetsend: function on_packetsend(packet) {
         if (packet.cmd === 'subscribe') {
-          _utils.logger.info('subscribing to topic = ' + JSON.stringify(packet.subscriptions));
+          _utils.logger.verbose('subscribing to topic = ' + JSON.stringify(packet.subscriptions));
         } else {
-          _utils.logger.debug('cmd = ' + packet.cmd + ', packet = ' + JSON.stringify(packet));
+          _utils.logger.verbose('cmd = ' + packet.cmd);
+          _utils.logger.debug('packet = ' + JSON.stringify(packet));
         }
       }
     };
