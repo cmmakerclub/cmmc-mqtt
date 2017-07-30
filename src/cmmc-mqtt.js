@@ -1,13 +1,10 @@
 import { logger } from './utils'
-import _ from 'underscore'
 import mqtt from 'mqtt'
 
 export default {
-  create: (mqttOpts, subTopics = [], autoconnect = true) => {
-    const _opts = _.clone(mqttOpts)
-    let _connectString = _opts.connectString
+  create: (connectString, subTopics = [], autoconnect = true) => {
     let _forwardClient, _forwardPrefix
-    const _mqtt = mqtt.connect(_connectString)
+    const _mqtt = mqtt.connect(connectString)
     const _callbacks = {
       on_connected: () => { },
       on_connecting: () => { },
@@ -16,7 +13,7 @@ export default {
       on_error: () => { },
       on_packetsend: (packet) => {
         if (packet.cmd === 'subscribe') {
-          logger.debug(`subscribing to topic = ${JSON.stringify(packet.subscriptions)}`)
+          logger.info(`subscribing to topic = ${JSON.stringify(packet.subscriptions)}`)
         } else {
           logger.debug(`cmd = ${packet.cmd}, packet = ${JSON.stringify(packet)}`)
         }

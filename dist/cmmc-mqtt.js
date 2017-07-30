@@ -6,10 +6,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _utils = require('./utils');
 
-var _underscore = require('underscore');
-
-var _underscore2 = _interopRequireDefault(_underscore);
-
 var _mqtt2 = require('mqtt');
 
 var _mqtt3 = _interopRequireDefault(_mqtt2);
@@ -17,15 +13,13 @@ var _mqtt3 = _interopRequireDefault(_mqtt2);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-  create: function create(mqttOpts) {
+  create: function create(connectString) {
     var subTopics = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
     var autoconnect = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
-    var _opts = _underscore2.default.clone(mqttOpts);
-    var _connectString = _opts.connectString;
     var _forwardClient = void 0,
         _forwardPrefix = void 0;
-    var _mqtt = _mqtt3.default.connect(_connectString);
+    var _mqtt = _mqtt3.default.connect(connectString);
     var _callbacks = {
       on_connected: function on_connected() {},
       on_connecting: function on_connecting() {},
@@ -34,7 +28,7 @@ exports.default = {
       on_error: function on_error() {},
       on_packetsend: function on_packetsend(packet) {
         if (packet.cmd === 'subscribe') {
-          _utils.logger.debug('subscribing to topic = ' + JSON.stringify(packet.subscriptions));
+          _utils.logger.info('subscribing to topic = ' + JSON.stringify(packet.subscriptions));
         } else {
           _utils.logger.debug('cmd = ' + packet.cmd + ', packet = ' + JSON.stringify(packet));
         }
