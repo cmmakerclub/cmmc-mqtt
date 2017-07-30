@@ -29,7 +29,9 @@ export default {
         _mqtt.on('packetsend', _callbacks.on_packetsend)
         _mqtt.on('message', (topic, payload) => {
           _callbacks.on_message(topic, payload)
-          _forwardClient.publish(`${_forwardPrefix}${topic}`, payload)
+          if (_forwardClient) {
+            _forwardClient.publish(`${_forwardPrefix}${topic}`, payload)
+          }
         })
         _mqtt.on('close', _callbacks.on_close)
         _mqtt.on('error', _callbacks.on_error)
