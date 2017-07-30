@@ -30,8 +30,7 @@ exports.default = {
         if (packet.cmd === 'subscribe') {
           _utils.logger.verbose('subscribing to topic = ' + JSON.stringify(packet.subscriptions));
         } else {
-          _utils.logger.verbose('cmd = ' + packet.cmd);
-          _utils.logger.debug('cmd = ' + packet.cmd + ' packet = ' + JSON.stringify(packet));
+          _utils.logger.verbose('cmd = ' + packet.cmd + ' packet = ' + JSON.stringify(packet));
         }
       }
     };
@@ -43,9 +42,9 @@ exports.default = {
         _mqtt.on('packetsend', _callbacks.on_packetsend);
         _mqtt.on('message', function (topic, payload) {
           _callbacks.on_message(topic, payload);
-          _utils.logger.info('message arrived topic =  ' + topic);
+          _utils.logger.info('[' + connectString + '] message arrived topic =  ' + topic);
           if (_forwardClient) {
-            _utils.logger.verbose('publish: ' + _forwardPrefix + topic);
+            _utils.logger.verbose('[' + connectString + '] publish: ' + _forwardPrefix + topic);
             _utils.logger.debug(payload.toString('hex'));
             _forwardClient.publish('' + _forwardPrefix + topic, payload);
           }
@@ -56,7 +55,7 @@ exports.default = {
           _utils.logger.info(connectString + ' connected.');
           _callbacks.on_connected.call(undefined);
           subTopics.forEach(function (topic, idx) {
-            _utils.logger.info('subscribing to topic: ' + topic);
+            _utils.logger.info(connectString + ' subscribing to topic: ' + topic);
             _mqtt.subscribe(topic);
           });
         });
