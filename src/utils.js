@@ -3,6 +3,7 @@ const winston = require('winston')
 const chalk = require('chalk')
 
 export const logger = new (winston.Logger)({
+  level: 'debug',
   transports: [
     new (winston.transports.Console)({
       timestamp: () => moment().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss'),
@@ -11,7 +12,7 @@ export const logger = new (winston.Logger)({
         let level = options.level.toUpperCase()
         let message = (options.message ? options.message : '')
         // let meta = options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : ''
-        return `[${timestamp}] ${chalk.bold(level)} ${message}`
+        return `[${chalk.white(timestamp)}] ${chalk.bold(level)} ${message}`
       }
     })
   ]
