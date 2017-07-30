@@ -7,7 +7,7 @@ export default {
     const _opts = _.clone(mqttOpts)
     let _connectString
     if (_opts.username && _opts.password) {
-      _connectString = `${_opts.host}:${_opts.password}@${_opts.host}`
+      _connectString = `${_opts.username}:${_opts.password}@${_opts.host}:${_opts.port}`
     } else {
       _connectString = `${_opts.host}:${_opts.port}`
     }

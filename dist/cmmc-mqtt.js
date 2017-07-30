@@ -24,7 +24,7 @@ exports.default = {
     var _opts = _underscore2.default.clone(mqttOpts);
     var _connectString = void 0;
     if (_opts.username && _opts.password) {
-      _connectString = _opts.host + ':' + _opts.password + '@' + _opts.host;
+      _connectString = _opts.username + ':' + _opts.password + '@' + _opts.host + ':' + _opts.port;
     } else {
       _connectString = _opts.host + ':' + _opts.port;
     }
