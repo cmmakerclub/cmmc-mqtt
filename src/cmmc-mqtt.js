@@ -18,7 +18,7 @@ export default {
         if (packet.cmd === 'subscribe') {
           logger.verbose(`subscribing to topic = ${JSON.stringify(packet.subscriptions)}`)
         } else {
-          logger.verbose(`cmd = ${packet.cmd}, password = ${JSON.stringify(packet)}`)
+          logger.verbose(`cmd = ${packet.cmd}, packet = ${JSON.stringify(packet)}`)
         }
       }
     }
