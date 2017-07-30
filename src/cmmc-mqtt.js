@@ -5,12 +5,7 @@ import mqtt from 'mqtt'
 export default {
   create: (mqttOpts, subTopics = [], autoconnect = true) => {
     const _opts = _.clone(mqttOpts)
-    let _connectString
-    if (_opts.username && _opts.password) {
-      _connectString = `${_opts.username}:${_opts.password}@${_opts.host}:${_opts.port}`
-    } else {
-      _connectString = `${_opts.host}:${_opts.port}`
-    }
+    let _connectString = _opts.connectString
     let _forwardClient, _forwardPrefix
     const _mqtt = mqtt.connect(_connectString)
     const _callbacks = {

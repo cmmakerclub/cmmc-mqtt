@@ -22,12 +22,7 @@ exports.default = {
     var autoconnect = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
     var _opts = _underscore2.default.clone(mqttOpts);
-    var _connectString = void 0;
-    if (_opts.username && _opts.password) {
-      _connectString = _opts.username + ':' + _opts.password + '@' + _opts.host + ':' + _opts.port;
-    } else {
-      _connectString = _opts.host + ':' + _opts.port;
-    }
+    var _connectString = _opts.connectString;
     var _forwardClient = void 0,
         _forwardPrefix = void 0;
     var _mqtt = _mqtt3.default.connect(_connectString);
