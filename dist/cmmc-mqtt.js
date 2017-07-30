@@ -34,9 +34,9 @@ exports.default = {
       on_error: function on_error() {},
       on_packetsend: function on_packetsend(packet) {
         if (packet.cmd === 'subscribe') {
-          _utils.logger.verbose('subscribing to topic = ' + JSON.stringify(packet.subscriptions));
+          _utils.logger.debug('subscribing to topic = ' + JSON.stringify(packet.subscriptions));
         } else {
-          _utils.logger.verbose('cmd = ' + packet.cmd + ', packet = ' + JSON.stringify(packet));
+          _utils.logger.debug('cmd = ' + packet.cmd + ', packet = ' + JSON.stringify(packet));
         }
       }
     };
@@ -48,6 +48,8 @@ exports.default = {
         _mqtt.on('message', function (topic, payload) {
           _callbacks.on_message(topic, payload);
           if (_forwardClient) {
+            _utils.logger.verbose('publish: ' + _forwardPrefix + topic);
+            _utils.logger.debug(payload.toString('hex'));
             _forwardClient.publish('' + _forwardPrefix + topic, payload);
           }
         });
@@ -56,7 +58,8 @@ exports.default = {
         _mqtt.on('connect', function () {
           _callbacks.on_connected.call(undefined);
           subTopics.forEach(function (topic, idx) {
-            return _mqtt.subscribe(topic);
+            _utils.logger.verbose('subscribe topic: ' + topic);
+            _mqtt.subscribe(topic);
           });
         });
       },

@@ -16,9 +16,9 @@ export default {
       on_error: () => { },
       on_packetsend: (packet) => {
         if (packet.cmd === 'subscribe') {
-          logger.verbose(`subscribing to topic = ${JSON.stringify(packet.subscriptions)}`)
+          logger.debug(`subscribing to topic = ${JSON.stringify(packet.subscriptions)}`)
         } else {
-          logger.verbose(`cmd = ${packet.cmd}, packet = ${JSON.stringify(packet)}`)
+          logger.debug(`cmd = ${packet.cmd}, packet = ${JSON.stringify(packet)}`)
         }
       }
     }
@@ -30,6 +30,8 @@ export default {
         _mqtt.on('message', (topic, payload) => {
           _callbacks.on_message(topic, payload)
           if (_forwardClient) {
+            logger.verbose(`publish: ${_forwardPrefix}${topic}`)
+            logger.debug(payload.toString('hex'))
             _forwardClient.publish(`${_forwardPrefix}${topic}`, payload)
           }
         })
@@ -37,7 +39,10 @@ export default {
         _mqtt.on('error', _callbacks.on_error)
         _mqtt.on('connect', () => {
           _callbacks.on_connected.call(this)
-          subTopics.forEach((topic, idx) => _mqtt.subscribe(topic))
+          subTopics.forEach((topic, idx) => {
+            logger.verbose(`subscribe topic: ${topic}`)
+            _mqtt.subscribe(topic)
+          })
         })
       },
       register: (cbName, func) => {
