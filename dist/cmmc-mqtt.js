@@ -36,6 +36,7 @@ exports.default = {
     };
     var ret = {
       connect: function connect() {
+        _utils.logger.debug('connecting to mqtt broker with ' + connectString);
         _callbacks.on_connecting.call(undefined);
         // register callbacks
         _mqtt.on('packetsend', _callbacks.on_packetsend);
@@ -50,6 +51,7 @@ exports.default = {
         _mqtt.on('close', _callbacks.on_close);
         _mqtt.on('error', _callbacks.on_error);
         _mqtt.on('connect', function () {
+          _utils.logger.verbose('mqtt connected');
           _callbacks.on_connected.call(undefined);
           subTopics.forEach(function (topic, idx) {
             _utils.logger.verbose('subscribe topic: ' + topic);

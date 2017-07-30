@@ -21,6 +21,7 @@ export default {
     }
     const ret = {
       connect: () => {
+        logger.debug(`connecting to mqtt broker with ${connectString}`)
         _callbacks.on_connecting.call(this)
         // register callbacks
         _mqtt.on('packetsend', _callbacks.on_packetsend)
@@ -35,6 +36,7 @@ export default {
         _mqtt.on('close', _callbacks.on_close)
         _mqtt.on('error', _callbacks.on_error)
         _mqtt.on('connect', () => {
+          logger.verbose(`mqtt connected`)
           _callbacks.on_connected.call(this)
           subTopics.forEach((topic, idx) => {
             logger.verbose(`subscribe topic: ${topic}`)
