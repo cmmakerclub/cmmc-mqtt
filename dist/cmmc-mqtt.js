@@ -41,8 +41,8 @@ exports.default = {
         // register callbacks
         _mqtt.on('packetsend', _callbacks.on_packetsend);
         _mqtt.on('message', function (topic, payload) {
-          _callbacks.on_message(topic, payload);
           _utils.logger.info('[' + connectString + '] message arrived topic =  ' + topic);
+          _callbacks.on_message(topic, payload);
           if (_forwardClient) {
             _utils.logger.verbose('[' + connectString + '] publish: ' + _forwardPrefix + topic);
             _utils.logger.debug(payload.toString('hex'));
