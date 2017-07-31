@@ -44,7 +44,7 @@ exports.default = {
           _utils.logger.info('message arrived topic =  ' + topic);
           _callbacks.on_message(topic, payload);
           if (_forwardClient) {
-            _utils.logger.info('being forwarded to topic = ' + _forwardPrefix + topic);
+            _utils.logger.verbose('being forwarded to topic = ' + _forwardPrefix + topic);
             _utils.logger.verbose(payload.toString('hex'));
             _forwardClient.publish('' + _forwardPrefix + topic, payload);
           }
