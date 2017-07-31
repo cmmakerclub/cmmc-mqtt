@@ -29,7 +29,7 @@ export default {
           logger.info(`message arrived topic =  ${topic}`)
           _callbacks.on_message(topic, payload)
           if (_forwardClient) {
-            logger.info(`being forwarded to topic = ${_forwardPrefix}${topic}`)
+            logger.verbose(`being forwarded to topic = ${_forwardPrefix}${topic}`)
             logger.verbose(payload.toString('hex'))
             _forwardClient.publish(`${_forwardPrefix}${topic}`, payload)
           }
