@@ -41,11 +41,11 @@ exports.default = {
         // register callbacks
         _mqtt.on('packetsend', _callbacks.on_packetsend);
         _mqtt.on('message', function (topic, payload) {
-          _utils.logger.info('[' + connectString + '] message arrived topic =  ' + topic);
+          _utils.logger.info('message arrived topic =  ' + topic);
           _callbacks.on_message(topic, payload);
           if (_forwardClient) {
-            _utils.logger.verbose('[' + connectString + '] publish: ' + _forwardPrefix + topic);
-            _utils.logger.debug(payload.toString('hex'));
+            _utils.logger.info('being forwarded to topic = ' + _forwardPrefix + topic);
+            _utils.logger.verbose(payload.toString('hex'));
             _forwardClient.publish('' + _forwardPrefix + topic, payload);
           }
         });
@@ -75,6 +75,7 @@ exports.default = {
         _forwardPrefix = options.prefix;
       },
       publish: function publish(topic, payload) {
+        _utils.logger.info('being published to ' + topic);
         _mqtt.publish(topic, payload);
       }
     };

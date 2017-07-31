@@ -26,11 +26,11 @@ export default {
         // register callbacks
         _mqtt.on('packetsend', _callbacks.on_packetsend)
         _mqtt.on('message', (topic, payload) => {
-          logger.info(`[${connectString}] message arrived topic =  ${topic}`)
+          logger.info(`message arrived topic =  ${topic}`)
           _callbacks.on_message(topic, payload)
           if (_forwardClient) {
-            logger.verbose(`[${connectString}] publish: ${_forwardPrefix}${topic}`)
-            logger.debug(payload.toString('hex'))
+            logger.info(`being forwarded to topic = ${_forwardPrefix}${topic}`)
+            logger.verbose(payload.toString('hex'))
             _forwardClient.publish(`${_forwardPrefix}${topic}`, payload)
           }
         })
@@ -60,6 +60,7 @@ export default {
         _forwardPrefix = options.prefix
       },
       publish: (topic, payload) => {
+        logger.info(`being published to ${topic}`)
         _mqtt.publish(topic, payload)
       }
     }
