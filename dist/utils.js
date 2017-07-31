@@ -7,7 +7,7 @@ var moment = require('moment-timezone');
 var winston = require('winston');
 var chalk = require('chalk');
 
-console.log('LOG_LEVEL = ' + process.env.LOG_LEVEL);
+console.log('env.LOG_LEVEL = ' + process.env.LOG_LEVEL);
 var logger = exports.logger = new winston.Logger({
   level: process.env.LOG_LEVEL || 'info',
   transports: [new winston.transports.Console({
@@ -19,7 +19,7 @@ var logger = exports.logger = new winston.Logger({
       var level = options.level.toUpperCase();
       var message = options.message ? options.message : '';
       // let meta = options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : ''
-      return '[' + chalk.white(timestamp) + '] ' + chalk.bold(level) + ' ' + message;
+      return '[CMMC-MQTT][' + chalk.white(timestamp) + '] ' + chalk.bold(level) + ' ' + message;
     }
   })]
 });
