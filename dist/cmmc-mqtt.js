@@ -28,9 +28,9 @@ exports.default = {
       on_error: function on_error() {},
       on_packetsend: function on_packetsend(packet) {
         if (packet.cmd === 'subscribe') {
-          _utils.logger.verbose('subscribing to topic = ' + JSON.stringify(packet.subscriptions));
+          _utils.logger.debug('subscribing to topic = ' + JSON.stringify(packet.subscriptions));
         } else {
-          _utils.logger.verbose('cmd = ' + packet.cmd + ' packet = ' + JSON.stringify(packet));
+          _utils.logger.debug('cmd = ' + packet.cmd + ' packet = ' + JSON.stringify(packet));
         }
       }
     };
@@ -41,18 +41,18 @@ exports.default = {
         // register callbacks
         _mqtt.on('packetsend', _callbacks.on_packetsend);
         _mqtt.on('message', function (topic, payload) {
-          _utils.logger.info('message arrived topic =  ' + topic);
+          _utils.logger.debug('message arrived topic =  ' + topic);
           _callbacks.on_message(topic, payload);
           if (_forwardClient) {
-            _utils.logger.verbose('being forwarded to topic = ' + _forwardPrefix + topic);
-            _utils.logger.verbose(payload.toString('hex'));
+            _utils.logger.debug('being forwarded to topic = ' + _forwardPrefix + topic);
+            _utils.logger.debug(payload.toString('hex'));
             _forwardClient.publish('' + _forwardPrefix + topic, payload);
           }
         });
         _mqtt.on('close', _callbacks.on_close);
         _mqtt.on('error', _callbacks.on_error);
         _mqtt.on('connect', function () {
-          _utils.logger.info(connectString + ' connected.');
+          _utils.logger.debug(connectString + ' connected.');
           _callbacks.on_connected.call(undefined);
           subTopics.forEach(function (topic, idx) {
             _utils.logger.info(connectString + ' subscribing to topic: ' + topic);
@@ -62,10 +62,10 @@ exports.default = {
       },
       register: function register(cbName, func) {
         if (_callbacks[cbName]) {
-          _utils.logger.verbose('register callback ' + cbName);
+          _utils.logger.debug('register callback ' + cbName);
           _callbacks[cbName] = func;
         } else {
-          _utils.logger.verbose('try to register unlisted callback = ' + cbName);
+          _utils.logger.debug('try to register unlisted callback = ' + cbName);
         }
       },
       forward: function forward(mqttClient, options) {
@@ -75,7 +75,7 @@ exports.default = {
         _forwardPrefix = options.prefix;
       },
       publish: function publish(topic, payload) {
-        _utils.logger.info('being published to ' + topic);
+        _utils.logger.debug('being published to ' + topic);
         _mqtt.publish(topic, payload);
       }
     };

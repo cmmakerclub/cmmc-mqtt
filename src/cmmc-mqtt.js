@@ -13,9 +13,9 @@ export default {
       on_error: () => { },
       on_packetsend: (packet) => {
         if (packet.cmd === 'subscribe') {
-          logger.verbose(`subscribing to topic = ${JSON.stringify(packet.subscriptions)}`)
+          logger.debug(`subscribing to topic = ${JSON.stringify(packet.subscriptions)}`)
         } else {
-          logger.verbose(`cmd = ${packet.cmd} packet = ${JSON.stringify(packet)}`)
+          logger.debug(`cmd = ${packet.cmd} packet = ${JSON.stringify(packet)}`)
         }
       }
     }
@@ -26,18 +26,18 @@ export default {
         // register callbacks
         _mqtt.on('packetsend', _callbacks.on_packetsend)
         _mqtt.on('message', (topic, payload) => {
-          logger.info(`message arrived topic =  ${topic}`)
+          logger.debug(`message arrived topic =  ${topic}`)
           _callbacks.on_message(topic, payload)
           if (_forwardClient) {
-            logger.verbose(`being forwarded to topic = ${_forwardPrefix}${topic}`)
-            logger.verbose(payload.toString('hex'))
+            logger.debug(`being forwarded to topic = ${_forwardPrefix}${topic}`)
+            logger.debug(payload.toString('hex'))
             _forwardClient.publish(`${_forwardPrefix}${topic}`, payload)
           }
         })
         _mqtt.on('close', _callbacks.on_close)
         _mqtt.on('error', _callbacks.on_error)
         _mqtt.on('connect', () => {
-          logger.info(`${connectString} connected.`)
+          logger.debug(`${connectString} connected.`)
           _callbacks.on_connected.call(this)
           subTopics.forEach((topic, idx) => {
             logger.info(`${connectString} subscribing to topic: ${topic}`)
@@ -47,10 +47,10 @@ export default {
       },
       register: (cbName, func) => {
         if (_callbacks[cbName]) {
-          logger.verbose(`register callback ${cbName}`)
+          logger.debug(`register callback ${cbName}`)
           _callbacks[cbName] = func
         } else {
-          logger.verbose(`try to register unlisted callback = ${cbName}`)
+          logger.debug(`try to register unlisted callback = ${cbName}`)
         }
       },
       forward: (mqttClient, options) => {
@@ -60,7 +60,7 @@ export default {
         _forwardPrefix = options.prefix
       },
       publish: (topic, payload) => {
-        logger.info(`being published to ${topic}`)
+        logger.debug(`being published to ${topic}`)
         _mqtt.publish(topic, payload)
       }
     }
