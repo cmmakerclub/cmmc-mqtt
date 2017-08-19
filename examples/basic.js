@@ -1,14 +1,21 @@
-import mqtt from '../src/index'
+import { mqtt } from '../src/index'
 import { logger } from '../src/utils'
 
-let mqttConfig = {connectString: 'mqtt://mqtt.cmmc.io'}
-
-let mqttClient1 = mqtt.create(mqttConfig, ['ESPNOW/18fe34db3b98/+/status'])
+let mqttClient1 = mqtt.create('mqtt://q.cmmc.io:51883', ['PROXY/MESH/1'])
+let mqttClient2 = mqtt.create('mqtt://mqtt.cmmc.io:1883')
 
 mqttClient1.register('on_message', (topic, payload) => {
   logger.info(`[app] on_message topic = ${topic}`)
-  logger.debug(`[app] payload = ${payload.toString('hex')}`)
+  logger.info(`[app] on_message payload = ${payload}`)
+}).forward(mqttClient2, {
+  prefix: 'MARU/',
+  fn: (prefix, topic, message, packet) => {
+    let object = JSON.parse(message.toString())
+    let [retain, qos] = [packet.retain, packet.qos]
+    return {
+      topics: [`${prefix}${object.d.myName}/status`],
+      payload: JSON.stringify(object),
+      options: {retain, qos}
+    }
+  }
 })
-
-// let mqttClient2 = mqtt.create(mqttConfig)
-// mqttClient1.forward(mqttClient2, {prefix: 'NAT/HELLO/'})

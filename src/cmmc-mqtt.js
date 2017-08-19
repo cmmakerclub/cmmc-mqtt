@@ -5,6 +5,7 @@ export default {
   create: (connectString, subTopics = [], autoconnect = true) => {
     let _forwardClient, _forwardPrefix
     const _mqtt = mqtt.connect(connectString)
+    let _converterFn = (input) => input
     const _callbacks = {
       on_connected: () => { },
       on_connecting: () => { },
@@ -23,27 +24,36 @@ export default {
       connect: () => {
         logger.info(`connecting to mqtt broker with ${connectString}`)
         _callbacks.on_connecting.call(this)
+
         // register callbacks
         _mqtt.on('packetsend', _callbacks.on_packetsend)
-        _mqtt.on('message', (topic, payload) => {
+        _mqtt.on('message', (topic, message, packet) => {
           logger.debug(`message arrived topic =  ${topic}`)
-          _callbacks.on_message(topic, payload)
+          logger.debug(`message arrived payload =  ${message}`)
+          _callbacks.on_message(topic, message)
+
           if (_forwardClient) {
-            logger.debug(`being forwarded to topic = ${_forwardPrefix}${topic}`)
-            logger.debug(payload.toString('hex'))
-            _forwardClient.publish(`${_forwardPrefix}${topic}`, payload)
+            const p = _converterFn(_forwardPrefix, topic, message, packet)
+            topic = `${_forwardPrefix}${topic}`
+            p.topics.forEach((topic, k) => {
+              logger.verbose(`being forwarded to topic = ${topic}`)
+              logger.verbose(`options = ${JSON.stringify(p.options)}`)
+              _forwardClient.publish(`${topic}`, p.payload, p.options)
+            })
+            logger.debug(message)
           }
         })
         _mqtt.on('close', _callbacks.on_close)
         _mqtt.on('error', _callbacks.on_error)
-        _mqtt.on('connect', () => {
-          logger.debug(`${connectString} connected.`)
-          _callbacks.on_connected.call(this)
+        _mqtt.on('connect', (connack) => {
+          logger.verbose(` ${connectString} connected.`)
+          _callbacks.on_connected.call(this, connack)
           subTopics.forEach((topic, idx) => {
-            logger.info(`${connectString} subscribing to topic: ${topic}`)
+            logger.verbose(`[${idx}] ${connectString} subscribing to topic: ${topic}`)
             _mqtt.subscribe(topic)
           })
         })
+        return ret
       },
       register: (cbName, func) => {
         if (_callbacks[cbName]) {
@@ -52,15 +62,17 @@ export default {
         } else {
           logger.debug(`try to register unlisted callback = ${cbName}`)
         }
+        return ret
       },
       forward: (mqttClient, options) => {
         options.prefix = options.prefix || ''
-        logger.debug(`prefix = ${options.prefix}`)
-        _forwardClient = mqttClient
-        _forwardPrefix = options.prefix
+        _converterFn = options.fn || _converterFn
+        logger.verbose(`prefix = ${options.prefix}`);
+        [_forwardClient, _forwardPrefix] = [mqttClient, options.prefix]
+        return ret
       },
       publish: (topic, payload) => {
-        logger.debug(`being published to ${topic}`)
+        logger.verbose(`being published to ${topic}`)
         _mqtt.publish(topic, payload)
       }
     }
