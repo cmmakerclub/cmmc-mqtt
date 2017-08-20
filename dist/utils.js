@@ -18,7 +18,11 @@ var logger = exports.logger = new winston.Logger({
       var level = options.level.toUpperCase();
       var message = options.message ? options.message : '';
       // let meta = options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : ''
-      return '[' + chalk.white(timestamp) + '][C*] ' + chalk.bold(level) + ' ' + message;
+      if (process.env.LOG_SHOW_TIMESTAMP) {
+        return '[' + chalk.white(timestamp) + '] ' + chalk.bold(level) + ' ' + message;
+      } else {
+        return '[' + chalk.bold(level) + ' ' + message;
+      }
     }
   })]
 });
