@@ -37,7 +37,7 @@ export default {
             topic = `${_forwardPrefix}${topic}`
             p.topics.forEach((topic, k) => {
               logger.verbose(`being forwarded to topic = ${topic}`)
-              logger.verbose(`options = ${JSON.stringify(p.options)}`)
+              logger.debug(`options = ${JSON.stringify(p.options)}`)
               _forwardClient.publish(`${topic}`, p.payload, p.options)
             })
             logger.debug(message)

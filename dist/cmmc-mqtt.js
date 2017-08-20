@@ -54,7 +54,7 @@ exports.default = {
             topic = '' + _forwardPrefix + topic;
             p.topics.forEach(function (topic, k) {
               _utils.logger.verbose('being forwarded to topic = ' + topic);
-              _utils.logger.verbose('options = ' + JSON.stringify(p.options));
+              _utils.logger.debug('options = ' + JSON.stringify(p.options));
               _forwardClient.publish('' + topic, p.payload, p.options);
             });
             _utils.logger.debug(message);
