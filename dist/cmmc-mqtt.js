@@ -92,7 +92,7 @@ exports.default = {
         return ret;
       },
       publish: function publish(topic, payload) {
-        _utils.logger.verbose('being published to ' + topic);
+        _utils.logger.verbose('being published to topic = ' + topic);
         _mqtt.publish(topic, payload);
       }
     };

@@ -72,7 +72,7 @@ export default {
         return ret
       },
       publish: (topic, payload) => {
-        logger.verbose(`being published to ${topic}`)
+        logger.verbose(`being published to topic = ${topic}`)
         _mqtt.publish(topic, payload)
       }
     }
