@@ -1,1 +1,1 @@
-{"version":3,"sources":["index.js"],"names":[],"mappings":";;;;;;AAAA","file":"index.js","sourcesContent":["import mqtt from './cmmc-mqtt'\n\nexport default mqtt\n"],"sourceRoot":"/Users/nat/projects/traffy/easy-mqtt/dist"}
+{"version":3,"sources":["index.js"],"names":["mqtt"],"mappings":";;;;;;;AAAA;;;;;;QAESA,I","file":"index.js","sourcesContent":["import mqtt from './cmmc-mqtt'\n\nexport { mqtt }\n"],"sourceRoot":"/Users/nat/projects/traffy/easy-mqtt/dist"}

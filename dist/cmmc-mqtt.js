@@ -20,6 +20,9 @@ exports.default = {
     var _forwardClient = void 0,
         _forwardPrefix = void 0;
     var _mqtt = _mqtt3.default.connect(connectString);
+    var _converterFn = function _converterFn(input) {
+      return input;
+    };
     var _callbacks = {
       on_connected: function on_connected() {},
       on_connecting: function on_connecting() {},
@@ -38,27 +41,36 @@ exports.default = {
       connect: function connect() {
         _utils.logger.info('connecting to mqtt broker with ' + connectString);
         _callbacks.on_connecting.call(undefined);
+
         // register callbacks
         _mqtt.on('packetsend', _callbacks.on_packetsend);
-        _mqtt.on('message', function (topic, payload) {
+        _mqtt.on('message', function (topic, message, packet) {
           _utils.logger.debug('message arrived topic =  ' + topic);
-          _callbacks.on_message(topic, payload);
+          _utils.logger.debug('message arrived payload =  ' + message);
+          _callbacks.on_message(topic, message);
+
           if (_forwardClient) {
-            _utils.logger.debug('being forwarded to topic = ' + _forwardPrefix + topic);
-            _utils.logger.debug(payload.toString('hex'));
-            _forwardClient.publish('' + _forwardPrefix + topic, payload);
+            var p = _converterFn(_forwardPrefix, topic, message, packet);
+            topic = '' + _forwardPrefix + topic;
+            p.topics.forEach(function (topic, k) {
+              _utils.logger.verbose('being forwarded to topic = ' + topic);
+              _utils.logger.verbose('options = ' + JSON.stringify(p.options));
+              _forwardClient.publish('' + topic, p.payload, p.options);
+            });
+            _utils.logger.debug(message);
           }
         });
         _mqtt.on('close', _callbacks.on_close);
         _mqtt.on('error', _callbacks.on_error);
-        _mqtt.on('connect', function () {
-          _utils.logger.debug(connectString + ' connected.');
-          _callbacks.on_connected.call(undefined);
+        _mqtt.on('connect', function (connack) {
+          _utils.logger.verbose(' ' + connectString + ' connected.');
+          _callbacks.on_connected.call(undefined, connack);
           subTopics.forEach(function (topic, idx) {
-            _utils.logger.info(connectString + ' subscribing to topic: ' + topic);
+            _utils.logger.verbose('[' + idx + '] ' + connectString + ' subscribing to topic: ' + topic);
             _mqtt.subscribe(topic);
           });
         });
+        return ret;
       },
       register: function register(cbName, func) {
         if (_callbacks[cbName]) {
@@ -67,15 +79,20 @@ exports.default = {
         } else {
           _utils.logger.debug('try to register unlisted callback = ' + cbName);
         }
+        return ret;
       },
       forward: function forward(mqttClient, options) {
         options.prefix = options.prefix || '';
-        _utils.logger.debug('prefix = ' + options.prefix);
-        _forwardClient = mqttClient;
-        _forwardPrefix = options.prefix;
+        _converterFn = options.fn || _converterFn;
+        _utils.logger.verbose('prefix = ' + options.prefix);
+        var _ref = [mqttClient, options.prefix];
+        _forwardClient = _ref[0];
+        _forwardPrefix = _ref[1];
+
+        return ret;
       },
       publish: function publish(topic, payload) {
-        _utils.logger.debug('being published to ' + topic);
+        _utils.logger.verbose('being published to ' + topic);
         _mqtt.publish(topic, payload);
       }
     };
