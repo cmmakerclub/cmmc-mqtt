@@ -15,7 +15,7 @@ export const logger = new (winston.Logger)({
         if (process.env.LOG_SHOW_TIMESTAMP) {
           return `[${chalk.white(timestamp)}] ${chalk.bold(level)} ${message}`
         } else {
-          return `[${chalk.bold(level)} ${message}`
+          return `[${chalk.bold(level)}] ${message}`
         }
       }
     })

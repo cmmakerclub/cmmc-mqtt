@@ -91,9 +91,10 @@ exports.default = {
 
         return ret;
       },
-      publish: function publish(topic, payload) {
+      publish: function publish(topic, payload, options) {
         _utils.logger.verbose('being published to topic = ' + topic);
-        _mqtt.publish(topic, payload);
+        _utils.logger.debug('being published with options= ' + JSON.stringify(options));
+        _mqtt.publish(topic, payload, options);
       }
     };
 

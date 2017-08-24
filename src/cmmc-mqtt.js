@@ -71,9 +71,10 @@ export default {
         [_forwardClient, _forwardPrefix] = [mqttClient, options.prefix]
         return ret
       },
-      publish: (topic, payload) => {
+      publish: (topic, payload, options) => {
         logger.verbose(`being published to topic = ${topic}`)
-        _mqtt.publish(topic, payload)
+        logger.debug(`being published with options= ${JSON.stringify(options)}`)
+        _mqtt.publish(topic, payload, options)
       }
     }
 
