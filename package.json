@@ -1,6 +1,6 @@
 {
   "name": "cmmc-mqtt",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "an easy mqtt wrapper",
   "engineStrict": true,
   "main": "dist/index.js",

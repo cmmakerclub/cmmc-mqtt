@@ -64,6 +64,10 @@ export default {
         }
         return ret
       },
+      mqtt_on: (cbName, func) => {
+        _mqtt.on(cbName, func)
+        return ret
+      },
       forward: (mqttClient, options) => {
         options.prefix = options.prefix || ''
         _converterFn = options.fn || _converterFn

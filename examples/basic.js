@@ -1,7 +1,7 @@
 import { mqtt } from '../src/index'
 import { logger } from '../src/utils'
 
-let mqttClient1 = mqtt.create('mqtt://q.cmmc.io:51883', ['PROXY/MESH/1'])
+let mqttClient1 = mqtt.create('mqtt://q.cmmc.io:51882', ['PROXY/MESH/1'])
 let mqttClient2 = mqtt.create('mqtt://q.cmmc.io:51883')
 
 mqttClient1.register('on_message', (topic, payload) => {
@@ -22,4 +22,6 @@ mqttClient1.register('on_message', (topic, payload) => {
       options: {retain, qos}
     }
   }
+}).mqtt_on('reconnect', function () {
+  console.log(`on reconnect to ${this.options.host}`)
 })

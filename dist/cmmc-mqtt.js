@@ -81,6 +81,10 @@ exports.default = {
         }
         return ret;
       },
+      mqtt_on: function mqtt_on(cbName, func) {
+        _mqtt.on(cbName, func);
+        return ret;
+      },
       forward: function forward(mqttClient, options) {
         options.prefix = options.prefix || '';
         _converterFn = options.fn || _converterFn;
